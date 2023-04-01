@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TGBot
+﻿namespace TGBot.Models
 {
-    class Tag:Modal<int>
+    class Tag : Model<int>
     {
         private string name;
         private double relevance;
 
         Tag(int id, string name, double relevance)
-            :base(id)
+            : base(id)
         {
-            this.id = id;
             this.name = name;
             this.relevance = relevance;
         }

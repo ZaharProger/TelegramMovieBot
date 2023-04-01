@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace TGBot
+namespace TGBot.Models
 {
-    class Actor:Modal<string>
+    class Actor : Model<string>
     {
         private string name;
         private List<string> category;
 
         Actor(string id, string name, List<string> category)
-            :base(id)
+            : base(id)
         {
-            this.id = id;
             this.name = name;
             this.category.AddRange(category);
         }

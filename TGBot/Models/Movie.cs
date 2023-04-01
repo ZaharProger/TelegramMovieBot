@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace TGBot
+namespace TGBot.Models
 {
-    class Movie:Modal<string>
+    class Movie : Model<string>
     {
         private string title;
         private string region;
@@ -15,7 +11,7 @@ namespace TGBot
         private List<Actor> actors;
 
         Movie(string id, string title, string region, Rating rating, List<Tag> tags, List<Actor> actors)
-            :base(id)
+            : base(id)
         {
             this.title = title;
             this.region = region;
@@ -26,11 +22,10 @@ namespace TGBot
 
         protected override string ToString()
         {
-            return base.id + "\t|\t" + title + "\t|\t" + region + "\t|\t" + 
-                   rating.ToString() + "\t|\t" + 
-                   tags.ToString() + "\t|\t" + 
-                   actors.ToString()
-                   ;
+            return id + "\t|\t" + title + "\t|\t" + region + "\t|\t" +
+                   rating.ToString() + "\t|\t" +
+                   tags.ToString() + "\t|\t" +
+                   actors.ToString();
         }
     }
 }
