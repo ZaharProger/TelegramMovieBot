@@ -1,6 +1,6 @@
 ﻿namespace TGBot.Models
 {
-    abstract class Model<T>
+    public abstract class Model<T>
     {
         protected T id;
         protected string regex;
@@ -11,8 +11,6 @@
             this.id = id;
         }
 
-        protected new abstract string ToString();
-
-
+        public override abstract string ToString();
     }
 }

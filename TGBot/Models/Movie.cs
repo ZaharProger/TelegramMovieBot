@@ -2,30 +2,30 @@
 
 namespace TGBot.Models
 {
-    class Movie : Model<string>
+    public class Movie : Model<string>
     {
-        private string title;
-        private string region;
-        private Rating rating;
-        private List<Tag> tags;
-        private List<Actor> actors;
+        public string Title { get; private set; }
+        public string Region { get; private set; }
+        public Rating Rating { get; private set; }
+        public List<Tag> Tags { get; private set; }
+        public List<Actor> Actors { get; private set; }
 
-        Movie(string id, string title, string region, Rating rating, List<Tag> tags, List<Actor> actors)
+        public Movie(string id, string title, string region, Rating rating = null, List<Tag> tags = null, List<Actor> actors = null)
             : base(id)
         {
-            this.title = title;
-            this.region = region;
-            this.rating = rating;
-            this.tags = tags;
-            this.actors = actors;
+            Title = title;
+            Region = region;
+            Rating = rating;
+            Tags = tags;
+            Actors = actors;
         }
 
-        protected override string ToString()
+        public override string ToString()
         {
-            return id + "\t|\t" + title + "\t|\t" + region + "\t|\t" +
-                   rating.ToString() + "\t|\t" +
-                   tags.ToString() + "\t|\t" +
-                   actors.ToString();
+            return id + "\t|\t" + Title + "\t|\t" + Region + "\t|\t" +
+                   Rating.ToString() + "\t|\t" +
+                   Tags.ToString() + "\t|\t" +
+                   Actors.ToString();
         }
     }
 }

@@ -13,11 +13,14 @@ namespace TGBot.Utils
 {
     public class TelegramBotWrapper
     {
-        private static TelegramBotWrapper instance = null;
         private ITelegramBotClient Bot { get; set; }
-        private bool isCanRequest;
-        private static readonly object syncLocker = new object();
+
+        private static TelegramBotWrapper instance = null;
         private readonly InlineKeyboardMarkup inlineKeyboard;
+        private Movie movie;
+
+        private static readonly object syncLocker = new object();
+        private bool isCanRequest;
 
         private TelegramBotWrapper(string token, ReceiverOptions options)
         {
@@ -25,14 +28,6 @@ namespace TGBot.Utils
             var cancellationToken = cts.Token;
 
             Bot = new TelegramBotClient(token);
-            Bot.StartReceiving(
-                HandleUpdateAsync,
-                HandleErrorAsync,
-                options,
-                cancellationToken
-            );
-
-            isCanRequest = true;
 
             inlineKeyboard = new InlineKeyboardMarkup(
                 new[]
@@ -53,6 +48,15 @@ namespace TGBot.Utils
                     },
                 }
             );
+
+            Bot.StartReceiving(
+                HandleUpdateAsync,
+                HandleErrorAsync,
+                options,
+                cancellationToken
+            );
+
+            isCanRequest = false;
         }
 
         public static TelegramBotWrapper GetInstance(string token, ReceiverOptions options)
@@ -73,108 +77,144 @@ namespace TGBot.Utils
 
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            if (isCanRequest)
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update));
+
+            if (update.Type == UpdateType.Message)
             {
-                Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update));
+                var message = update.Message;
+                var answer = "";
 
-                if (update.Type == UpdateType.Message)
+                if (message.Text.ToLower().Equals(BotConfig.START))
                 {
-                    var message = update.Message;
-                    var answer = "";
-
-                    if (message.Text.ToLower().Equals(BotConfig.START))
-                    {
-                        answer = BotConfig.START;
-                    }
-                    else if (message.Text.ToLower().Equals(BotConfig.WATCH))
-                    {
-                        answer = BotConfig.WATCH;
-                    }
-                    else if (message.Text.ToLower().Equals(BotConfig.DMITRI))
-                    {
-                        answer = BotConfig.DMITRI;
-                    }
-                    else
-                    {
-                        isCanRequest = false;
-                        answer = BotConfig.WAIT;
-                    }
-
-                    await botClient.SendTextMessageAsync(message.Chat, BotConfig.QApairs[answer]);
-
-                    if (!isCanRequest)
-                    {
-                        string movieTitle = await FindTitleCinema(message.Text);
-
-                        if (movieTitle.Equals(BotConfig.ERROR))
-                        {
-                            await botClient.SendTextMessageAsync(message.Chat, movieTitle);
-                        }
-                        else
-                        {
-                            await botClient.SendTextMessageAsync(
-                                chatId: message.Chat.Id,
-                                text: $"Фильм: {movieTitle}",
-                                replyMarkup: inlineKeyboard,
-                                cancellationToken: cancellationToken
-                            );
-                        }
-
-                        isCanRequest = true;
-                    }
+                    answer = BotConfig.START;
                 }
 
-                if (update.Type == UpdateType.CallbackQuery)
+                else if (message.Text.ToLower().Equals(BotConfig.WATCH))
                 {
-                    string codeOfButton = update.CallbackQuery.Data;
-                    var message = update.Message;
+                    answer = BotConfig.WATCH;
+                }
 
-                    if (codeOfButton.Equals(BotConfig.buttons.RATING) || codeOfButton.Equals(BotConfig.buttons.ACTORS))
+                else if (message.Text.ToLower().Equals(BotConfig.DMITRI))
+                {
+                    answer = BotConfig.DMITRI;
+                }
+
+                else
+                {
+                    answer = BotConfig.WAIT;
+                    isCanRequest = true;
+                }
+
+                await botClient.SendTextMessageAsync(message.Chat, BotConfig.QApairs[answer]);
+
+                if (isCanRequest)
+                {
+                    isCanRequest = false;
+                    string movieTitle = await FindTitleCinema(message.Text);
+
+                    if (movieTitle.Equals(BotConfig.ERROR))
                     {
-                        isCanRequest = false;
-
-                        if (codeOfButton.Equals(BotConfig.buttons.ACTORS))
-                        {
-                            await botClient.SendTextMessageAsync(
-                                chatId: update.CallbackQuery.Message.Chat.Id,
-                                BotConfig.QApairs[BotConfig.ACTORS_BUTTON]
-                            );
-                        }
-                        else
-                        {
-                            await botClient.SendTextMessageAsync(
-                                chatId: update.CallbackQuery.Message.Chat.Id,
-                                BotConfig.QApairs[BotConfig.RATING_BUTTON]
-                            );
-                        }      
-                        
-                        isCanRequest = true;
+                        await botClient.SendTextMessageAsync(message.Chat, movieTitle);
                     }
+
+                    else if (movieTitle.Equals(BotConfig.MISSING))
+                    {
+                        await botClient.SendTextMessageAsync(message.Chat, BotConfig.QApairs[BotConfig.MISSING]);
+                    }
+
+                    else
+                    {
+                        await botClient.SendTextMessageAsync(
+                            chatId: message.Chat.Id,
+                            text: $"Фильм: {movieTitle}",
+                            replyMarkup: inlineKeyboard,
+                            cancellationToken: cancellationToken
+                        );
+                    }
+
                 }
             }
 
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                isCanRequest = false;
+
+                string codeOfButton = update.CallbackQuery.Data;
+                var message = update.Message;
+
+                if (codeOfButton.Equals(BotConfig.buttons.RATING))
+                {
+                    await botClient.SendTextMessageAsync(
+                        chatId: update.CallbackQuery.Message.Chat.Id,
+                        BotConfig.QApairs[BotConfig.RATING_BUTTON]
+                    );    
+                }
+
+                else if (codeOfButton.Equals(BotConfig.buttons.ACTORS))
+                {
+                    await botClient.SendTextMessageAsync(
+                            chatId: update.CallbackQuery.Message.Chat.Id,
+                            BotConfig.QApairs[BotConfig.ACTORS_BUTTON]
+                        );
+                }
+
+                isCanRequest = true;
+            }
         }
 
         private async Task<string> FindTitleCinema(string attributes)
         {
-            var isEmpty = attributes == null;
-            var titleMovie = BotConfig.ERROR;
+            string answer = BotConfig.ERROR;
 
-            if (!isEmpty)
+            if (!string.IsNullOrWhiteSpace(attributes))
             {
                 List<string> listAttributes = new List<string>(attributes
                     .Trim()
-                    .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                    .ToLower()
+                    .Split(new char[0], StringSplitOptions.RemoveEmptyEntries)
                 );
 
                 if (listAttributes.Count != 0)
                 {
-                    var parser = new Parser();
-                    titleMovie = await parser.Parse(30, listAttributes);
-                }               
-            }          
-      
-            return titleMovie;
+                    //List<Movie> movies = (await Parser.Parse(listAttributes));
+                    List<string> tags = (await Parser.GetTagIdByTag(listAttributes));
+                    List<string> moviesID = (await Parser.GetMovieIdByTagId(tags));
+                    List<string> imdbID = (await Parser.GetImdbIdByMoviceId(moviesID));
+
+                    List<Movie> movies = (await Parser.GetMoviebByID(imdbID));
+
+                    if (movies.Count != 0)
+                        answer = movies[0].Title;
+
+                    else
+                        answer = BotConfig.MISSING;
+                }
+            }
+            
+            return answer;
+        }
+
+        private async Task<string> FindDescription(string description)
+        {
+            string answer = BotConfig.ERROR;
+
+            if (!string.IsNullOrWhiteSpace(description))
+            {
+                if (description.Equals(BotConfig.ACTORS_BUTTON))
+                {
+                    //movie = await Parser.Parse(30, movie.Actors);
+                    answer = movie.Actors.ToString();
+                }
+
+                else if (description.Equals(BotConfig.RATING_BUTTON))
+                {
+                    //movie = await Parser.Parse(30, movie.Rating);
+                    answer = movie.Rating.ToString();
+                }
+
+            }
+
+            return answer;
         }
 
         public static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)

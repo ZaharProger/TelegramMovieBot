@@ -8,6 +8,7 @@ namespace TGBot.Models
         public static readonly string WATCH = "/watch";
         public static readonly string DMITRI = "/dmitri";
         public static readonly string ERROR = "error";
+        public static readonly string MISSING = "missing";
         public static readonly string WAIT = "wait";
         public static readonly string ACTORS_BUTTON = "actors";
         public static readonly string RATING_BUTTON = "rating";
@@ -20,6 +21,7 @@ namespace TGBot.Models
             { DMITRI, "Спасибо за курс \U0001F499" },
             { ERROR, "Хммм...\nНе могу понять сообщение!" },
             { WAIT, "Сейчас найду!" },
+            { MISSING, "К сожалению по этим атрибутам я ничего не нашел" },
             { ACTORS_BUTTON, "Нажата Кнопка актеры" },
             { RATING_BUTTON, "Нажата Кнопка рейтинг" }
         };
