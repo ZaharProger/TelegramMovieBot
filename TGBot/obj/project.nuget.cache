@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "flXGiKWyLuMlYvOOWeduMBvaA3e1590Ss1OeLK/Ie6oE7OOYyllC6lSFQFWKrPmKLYanX1XjWvlgFQ+vT+1/Uw==",
+  "dgSpecHash": "64Fbb418GvUI55C6swJ59Y35xbfhaH56GXDOfiyRLNPfVExSVLFMinIOTUEcJem8pbKUwe1tJDuXuYhr5Vo6AA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\studentITacademy\\Documents\\Learning C#\\TelegramMovieBot\\TGBot\\TGBot.csproj",
+  "projectFilePath": "C:\\Users\\studentITacademy\\TelegramMovieBot\\TGBot\\TGBot.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\studentITacademy\\.nuget\\packages\\microsoft.extensions.configuration\\6.0.0\\microsoft.extensions.configuration.6.0.0.nupkg.sha512",
     "C:\\Users\\studentITacademy\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\6.0.0\\microsoft.extensions.configuration.abstractions.6.0.0.nupkg.sha512",

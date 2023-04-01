@@ -1773,20 +1773,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\studentITacademy\\.nuget\\packages\\": {}
+    "C:\\Users\\studentITacademy\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\studentITacademy\\Documents\\Learning C#\\TelegramMovieBot\\TGBot\\TGBot.csproj",
+      "projectUniqueName": "C:\\Users\\studentITacademy\\TelegramMovieBot\\TGBot\\TGBot.csproj",
       "projectName": "TGBot",
-      "projectPath": "C:\\Users\\studentITacademy\\Documents\\Learning C#\\TelegramMovieBot\\TGBot\\TGBot.csproj",
+      "projectPath": "C:\\Users\\studentITacademy\\TelegramMovieBot\\TGBot\\TGBot.csproj",
       "packagesPath": "C:\\Users\\studentITacademy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\studentITacademy\\Documents\\Learning C#\\TelegramMovieBot\\TGBot\\obj\\",
+      "outputPath": "C:\\Users\\studentITacademy\\TelegramMovieBot\\TGBot\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+      ],
       "configFilePaths": [
         "C:\\Users\\studentITacademy\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
