@@ -1,6 +1,6 @@
 ﻿namespace TGBot.Models
 {
-    class Rating : Model<string>
+    public class Rating : Model<string>
     {
         private float value;
 
@@ -10,7 +10,7 @@
             this.value = value;
         }
 
-        protected override string ToString()
+        public override string ToString()
         {
             return value.ToString();
         }

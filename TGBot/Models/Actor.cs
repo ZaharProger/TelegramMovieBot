@@ -2,7 +2,7 @@
 
 namespace TGBot.Models
 {
-    class Actor : Model<string>
+    public class Actor : Model<string>
     {
         private string name;
         private List<string> category;
@@ -14,7 +14,7 @@ namespace TGBot.Models
             this.category.AddRange(category);
         }
 
-        protected override string ToString()
+        public override string ToString()
         {
             return name + "(" + category.ToString() + ")";
         }
