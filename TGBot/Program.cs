@@ -8,7 +8,7 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Collections.Generic;
 
-namespace TelegramBotExperiments
+namespace TGBot
 {
 
     class Program
@@ -89,7 +89,9 @@ namespace TelegramBotExperiments
             if (listAttributes.Count == 0)
                 return "error";
 
-            //await ;
+            Parser parser = new Parser(); 
+
+            await parser.Parse(listAttributes);
 
             string titleMovie = "Hey";
             return titleMovie;

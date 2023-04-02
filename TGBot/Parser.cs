@@ -2,15 +2,17 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TGBot
 {
     public class Parser
     {
         private const string DELIMITER = "~~~";
-        public async void Parse(List<string> rawTags = null)
+        public async Task Parse(List<string> rawTags = null)
         {
             var fileNames = new string[] { };
+
             if (rawTags != null)
             {
                 fileNames = new string[] { "TagCodes_MovieLens.csv", "TagScores_MovieLens.csv" };
