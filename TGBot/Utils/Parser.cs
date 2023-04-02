@@ -10,7 +10,6 @@ namespace TGBot.Utils
 {
     public class Parser
     {
-        private const string DELIMITER = "\n\n";
         private static readonly string path = @"C:\Users\domol_000\Desktop\Мое\ml-latest\";
 
         private static readonly string[] fileNames = new string[] { "TagCodes_MovieLens", "TagScores_MovieLens", "links_IMDB_MovieLens", "MovieCodes_IMDB" };
