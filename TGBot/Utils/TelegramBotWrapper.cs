@@ -178,6 +178,8 @@ namespace TGBot.Utils
                 {
                     //List<Movie> movies = (await Parser.Parse(listAttributes));
                     List<string> tags = (await Parser.GetTagIdByTag(listAttributes));
+                    if (tags.Count == 0)
+                        return BotConfig.MISSING;
                     List<string> moviesID = (await Parser.GetMovieIdByTagId(tags));
                     List<string> imdbID = (await Parser.GetImdbIdByMoviceId(moviesID));
 

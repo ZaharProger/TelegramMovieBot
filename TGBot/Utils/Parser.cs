@@ -11,6 +11,7 @@ namespace TGBot.Utils
     public class Parser
     {
         private const string DELIMITER = "\n\n";
+        private static readonly string path = @"C:\Users\domol_000\Desktop\Мое\ml-latest\";
 
         private static readonly string[] fileNames = new string[] { "TagCodes_MovieLens", "TagScores_MovieLens", "links_IMDB_MovieLens", "MovieCodes_IMDB" };
 
@@ -21,10 +22,10 @@ namespace TGBot.Utils
 
             var data = new StringBuilder("");
 
-            using var readerTag = new StreamReader(@$"C:\Users\Sasha\source\repos\ml-latest\{fileNames[0]}.csv");
-            using var readerTagScore = new StreamReader(@$"C:\Users\Sasha\source\repos\ml-latest\{fileNames[1]}.csv");
-            using var readerLinks = new StreamReader(@$"C:\Users\Sasha\source\repos\ml-latest\{fileNames[2]}.csv");
-            using var readerMovie = new StreamReader(@$"C:\Users\Sasha\source\repos\ml-latest\{fileNames[3]}.tsv");
+            using var readerTag = new StreamReader($"{path}{fileNames[0]}.csv");
+            using var readerTagScore = new StreamReader($"{path}{fileNames[1]}.csv");
+            using var readerLinks = new StreamReader($"{path}{fileNames[2]}.csv");
+            using var readerMovie = new StreamReader($"{path}{fileNames[3]}.tsv");
 
             string regTagCodes = @"(?'id'\d+).(?'tag'" + rawTags[0];
 
@@ -111,9 +112,9 @@ namespace TGBot.Utils
         public static async Task<List<string>> GetTagIdByTag(List<string> tags)
         {
             List<string> tagId = new List<string>();
-            using var readerLinks = new StreamReader(@$"C:\Users\Sasha\source\repos\ml-latest\{fileNames[0]}.csv");
+            using var readerLinks = new StreamReader($"{path}{fileNames[0]}.csv");
 
-            string regTag = @"(?'id'\d+),(?'tag'" + tags[0];
+            string regTag = @"(?'id'\d+).(?'tag'" + tags[0];
             if (tags.Count > 1)
             {
                 foreach (var tag in tags)
@@ -134,7 +135,7 @@ namespace TGBot.Utils
         public static async Task<List<string>> GetMovieIdByTagId(List<string> tags)
         {
             List<string> movieId = new List<string>();
-            using var readerLinks = new StreamReader(@$"C:\Users\Sasha\source\repos\ml-latest\{fileNames[1]}.csv");
+            using var readerLinks = new StreamReader($"{path}{fileNames[1]}.csv");
             int cycle = 50;
 
             string regScore = @"(?'movieId'\d+),(?'tagId'" + tags[0];
@@ -142,7 +143,7 @@ namespace TGBot.Utils
             if (tags.Count > 1)
                 tags.ForEach(t => regScore += @"|" + t);
 
-            regScore += @").(?'relevant'\d.\d+)";
+            regScore += @"),(?'relevant'\d.\d+)";
 
             var file = await readerLinks.ReadToEndAsync();
 
@@ -163,7 +164,7 @@ namespace TGBot.Utils
 
         public static async Task<List<string>> GetImdbIdByMoviceId(List<string> movieId)
         {
-            using var readerLinks = new StreamReader(@$"C:\Users\Sasha\source\repos\ml-latest\{fileNames[2]}.csv");
+            using var readerLinks = new StreamReader($"{path}{fileNames[2]}.csv");
             int cycle = 50;
 
             string regLink = @"(?'movieId'" + movieId[0] ;
@@ -171,7 +172,7 @@ namespace TGBot.Utils
             if (movieId.Count > 1)
                 movieId.ForEach(t => regLink += @"|" + t);
 
-            regLink += @"),(?'imdbId'\d+),";
+            regLink += @").(?'imdbId'\d+),";
 
             var file = await readerLinks.ReadToEndAsync();
 
@@ -203,7 +204,7 @@ namespace TGBot.Utils
         public static async Task<List<Movie>> GetMoviebByID(List<string> imdbId)
         {
             List<Movie> movieList = new List<Movie>();
-            using var readerMovie = new StreamReader(@$"C:\Users\Sasha\source\repos\ml-latest\{fileNames[3]}.tsv");
+            using var readerMovie = new StreamReader($"{path}{fileNames[3]}.csv");
             int cycle = 50;
             string regMovie = @"(?'titleId'tt" + imdbId[0] ;
 
